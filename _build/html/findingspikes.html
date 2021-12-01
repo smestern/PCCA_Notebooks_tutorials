@@ -1,0 +1,1423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2. Finding Spikes! &#8212; Analyzing Patch-Clamp Electrophysiology in Python</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="_static/sphinx-book-theme.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="1. Getting started" href="gettingstarted.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Analyzing Patch-Clamp Electrophysiology in Python</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Patch clamp (current clamp) Analysis in python
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="gettingstarted.html">
+   1. Getting started
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   2. Finding Spikes!
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/findingspikes.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/findingspikes.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#note">
+   Note
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-our-spike-finder">
+   Setting up our spike finder
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-the-spikes">
+   Getting the Spikes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ensuring-you-captures-the-spikes">
+   Ensuring you captures the spikes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dv-cutoff-dv-dt-threshold">
+     dv_cutoff: dV/dT threshold
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#max-interval-time-between-threshold-and-peak">
+     max_interval: Time between threshold and peak
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#min-height-the-minimum-height-between-threshold-and-peak">
+     min_height: the minimum height between threshold and peak
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#min-peak-the-minimum-absolute-peak-of-the-action-potential">
+     min_peak: the minimum absolute peak of the action potential
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#putting-it-all-together-find-spikes-across-all-sweeps">
+   Putting it all together: Find spikes across all sweeps
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="finding-spikes">
+<h1>2. Finding Spikes!<a class="headerlink" href="#finding-spikes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="note">
+<h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
+<p>This section primairly focuses using IPFX to analyze your patch clamp data. In particular focuses on analyzing current clamp data. However you may find success with other analysis packages such as <a class="reference external" href="https://github.com/BlueBrain/BluePyEfe">https://github.com/BlueBrain/BluePyEfe</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyabf</span>
+<span class="kn">import</span> <span class="nn">ipfx</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\SMest\Anaconda3\lib\site-packages\numpy\_distributor_init.py:32: UserWarning: loaded more than 1 DLL from .libs:
+C:\Users\SMest\Anaconda3\lib\site-packages\numpy\.libs\libopenblas.NOIJJG62EMASZI6NYURL6JBKM4EVBGM7.gfortran-win_amd64.dll
+C:\Users\SMest\Anaconda3\lib\site-packages\numpy\.libs\libopenblas.PYQHXLVVQ7VESDPUVUADXEVJOBGHJPAY.gfortran-win_amd64.dll
+  stacklevel=1)
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The text.latex.preview rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The mathtext.fallback_to_cm rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: Support for setting the &#39;mathtext.fallback_to_cm&#39; rcParam is deprecated since 3.3 and will be removed two minor releases later; use &#39;mathtext.fallback : &#39;cm&#39; instead.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The validate_bool_maybe_none function was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The savefig.jpeg_quality rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The keymap.all_axes rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The animation.avconv_path rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+In C:\Users\SMest\Anaconda3\lib\site-packages\matplotlib\mpl-data\stylelib\_classic_test.mplstyle: 
+The animation.avconv_args rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abf</span> <span class="o">=</span> <span class="n">pyabf</span><span class="o">.</span><span class="n">ABF</span><span class="p">(</span><span class="s2">&quot;data/example1.abf&quot;</span><span class="p">)</span> <span class="c1">#this tells pyabf to load our data and store it in an abf object</span>
+<span class="n">abf</span><span class="o">.</span><span class="n">setSweep</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="setting-up-our-spike-finder">
+<h2>Setting up our spike finder<a class="headerlink" href="#setting-up-our-spike-finder" title="Permalink to this headline">¶</a></h2>
+<p>To begin with, we will import just the spike finder from IPFX.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ipfx.feature_extractor</span> <span class="kn">import</span> <span class="n">SpikeFeatureExtractor</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we will create our SpikeFeatureExtractor. To do so, we will create a object similar to our ABF object. We can pass our settings to the object, that way we will not have to specify the settings repeatedly. More on this later</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#Set the filter to 0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The above command intializes the spike feature extractor. Similar to the abf object, this has many attributes we can access.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">spike_fe</span><span class="p">)[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;max_interval&#39;,
+ &#39;min_height&#39;,
+ &#39;min_peak&#39;,
+ &#39;process&#39;,
+ &#39;reject_at_stim_start_interval&#39;,
+ &#39;spike_feature&#39;,
+ &#39;spike_feature_keys&#39;,
+ &#39;spikes&#39;,
+ &#39;start&#39;,
+ &#39;thresh_frac&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-the-spikes">
+<h2>Getting the Spikes<a class="headerlink" href="#getting-the-spikes" title="Permalink to this headline">¶</a></h2>
+<p>To begin, we will use the <code class="docutils literal notranslate"><span class="pre">spike.process</span></code> function to find our data. This function takes our Time, Response, and Command waveforms as input.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span> <span class="c1">#Processes that specific sweep from the ABF file</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:numexpr.utils:Note: NumExpr detected 16 cores but &quot;NUMEXPR_MAX_THREADS&quot; not set, so enforcing safe limit of 8.
+INFO:numexpr.utils:NumExpr defaulting to 8 threads.
+</pre></div>
+</div>
+</div>
+</div>
+<p>This returns a pandas <code class="docutils literal notranslate"><span class="pre">dataframe</span></code> containing information for each spike detected. These dataframes are similar to excel spread sheets. Each row is a single spike, and each column is a feature of that spike (for example peak voltage). For more explicit definitions of the various columns I recommend checking out the <a class="reference external" href="http://help.brain-map.org/display/celltypes/Documentation">Allen Institutes Ephys Whitepaper</a>. We can take a peek:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>threshold_index</th>
+      <th>clipped</th>
+      <th>threshold_t</th>
+      <th>threshold_v</th>
+      <th>threshold_i</th>
+      <th>peak_index</th>
+      <th>peak_t</th>
+      <th>peak_v</th>
+      <th>peak_i</th>
+      <th>trough_index</th>
+      <th>...</th>
+      <th>adp_index</th>
+      <th>adp_t</th>
+      <th>adp_v</th>
+      <th>adp_i</th>
+      <th>slow_trough_index</th>
+      <th>slow_trough_t</th>
+      <th>slow_trough_v</th>
+      <th>slow_trough_i</th>
+      <th>width</th>
+      <th>upstroke_downstroke_ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>12159</td>
+      <td>False</td>
+      <td>0.60795</td>
+      <td>-37.750244</td>
+      <td>50.0</td>
+      <td>12171</td>
+      <td>0.60855</td>
+      <td>27.832031</td>
+      <td>50.0</td>
+      <td>12214</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>12214.0</td>
+      <td>0.61070</td>
+      <td>-55.786133</td>
+      <td>50.0</td>
+      <td>0.00065</td>
+      <td>2.026667</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>12594</td>
+      <td>False</td>
+      <td>0.62970</td>
+      <td>-33.416748</td>
+      <td>50.0</td>
+      <td>12609</td>
+      <td>0.63045</td>
+      <td>18.920898</td>
+      <td>50.0</td>
+      <td>12671</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>12671.0</td>
+      <td>0.63355</td>
+      <td>-50.323486</td>
+      <td>50.0</td>
+      <td>0.00100</td>
+      <td>1.828125</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>12984</td>
+      <td>False</td>
+      <td>0.64920</td>
+      <td>-32.196045</td>
+      <td>50.0</td>
+      <td>13003</td>
+      <td>0.65015</td>
+      <td>14.862061</td>
+      <td>50.0</td>
+      <td>13072</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>13072.0</td>
+      <td>0.65360</td>
+      <td>-47.973633</td>
+      <td>50.0</td>
+      <td>0.00135</td>
+      <td>1.733333</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>13419</td>
+      <td>False</td>
+      <td>0.67095</td>
+      <td>-30.487061</td>
+      <td>50.0</td>
+      <td>13441</td>
+      <td>0.67205</td>
+      <td>14.953613</td>
+      <td>50.0</td>
+      <td>13524</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>13524.0</td>
+      <td>0.67620</td>
+      <td>-46.783447</td>
+      <td>50.0</td>
+      <td>0.00165</td>
+      <td>1.584416</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>13903</td>
+      <td>False</td>
+      <td>0.69515</td>
+      <td>-29.266357</td>
+      <td>50.0</td>
+      <td>13928</td>
+      <td>0.69640</td>
+      <td>13.366699</td>
+      <td>50.0</td>
+      <td>14021</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>14021.0</td>
+      <td>0.70105</td>
+      <td>-47.302246</td>
+      <td>50.0</td>
+      <td>0.00185</td>
+      <td>1.360000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>14425</td>
+      <td>False</td>
+      <td>0.72125</td>
+      <td>-29.541016</td>
+      <td>50.0</td>
+      <td>14452</td>
+      <td>0.72260</td>
+      <td>15.319824</td>
+      <td>50.0</td>
+      <td>14544</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>14544.0</td>
+      <td>0.72720</td>
+      <td>-47.851562</td>
+      <td>50.0</td>
+      <td>0.00185</td>
+      <td>1.378378</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>15025</td>
+      <td>False</td>
+      <td>0.75125</td>
+      <td>-28.442383</td>
+      <td>50.0</td>
+      <td>15053</td>
+      <td>0.75265</td>
+      <td>13.885498</td>
+      <td>50.0</td>
+      <td>15154</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>15154.0</td>
+      <td>0.75770</td>
+      <td>-48.431396</td>
+      <td>50.0</td>
+      <td>0.00205</td>
+      <td>1.250000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>15629</td>
+      <td>False</td>
+      <td>0.78145</td>
+      <td>-28.167725</td>
+      <td>50.0</td>
+      <td>15653</td>
+      <td>0.78265</td>
+      <td>15.869141</td>
+      <td>50.0</td>
+      <td>15762</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>15762.0</td>
+      <td>0.78810</td>
+      <td>-47.882080</td>
+      <td>50.0</td>
+      <td>0.00185</td>
+      <td>1.351351</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>16253</td>
+      <td>False</td>
+      <td>0.81265</td>
+      <td>-29.479980</td>
+      <td>50.0</td>
+      <td>16279</td>
+      <td>0.81395</td>
+      <td>16.082764</td>
+      <td>50.0</td>
+      <td>16376</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>16376.0</td>
+      <td>0.81880</td>
+      <td>-47.546387</td>
+      <td>50.0</td>
+      <td>0.00190</td>
+      <td>1.544118</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>16889</td>
+      <td>False</td>
+      <td>0.84445</td>
+      <td>-29.174805</td>
+      <td>50.0</td>
+      <td>16916</td>
+      <td>0.84580</td>
+      <td>14.495850</td>
+      <td>50.0</td>
+      <td>17036</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>17036.0</td>
+      <td>0.85180</td>
+      <td>-47.882080</td>
+      <td>50.0</td>
+      <td>0.00205</td>
+      <td>1.362319</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>17596</td>
+      <td>False</td>
+      <td>0.87980</td>
+      <td>-29.388428</td>
+      <td>50.0</td>
+      <td>17624</td>
+      <td>0.88120</td>
+      <td>14.190674</td>
+      <td>50.0</td>
+      <td>17752</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>17752.0</td>
+      <td>0.88760</td>
+      <td>-46.539307</td>
+      <td>50.0</td>
+      <td>0.00205</td>
+      <td>1.375000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>18320</td>
+      <td>False</td>
+      <td>0.91600</td>
+      <td>-29.510498</td>
+      <td>50.0</td>
+      <td>18348</td>
+      <td>0.91740</td>
+      <td>16.571045</td>
+      <td>50.0</td>
+      <td>18447</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>18447.0</td>
+      <td>0.92235</td>
+      <td>-47.882080</td>
+      <td>50.0</td>
+      <td>0.00195</td>
+      <td>1.304348</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>19073</td>
+      <td>False</td>
+      <td>0.95365</td>
+      <td>-28.686523</td>
+      <td>50.0</td>
+      <td>19099</td>
+      <td>0.95495</td>
+      <td>15.869141</td>
+      <td>50.0</td>
+      <td>19226</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>19226.0</td>
+      <td>0.96130</td>
+      <td>-47.210693</td>
+      <td>50.0</td>
+      <td>0.00200</td>
+      <td>1.319445</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19825</td>
+      <td>False</td>
+      <td>0.99125</td>
+      <td>-28.442383</td>
+      <td>50.0</td>
+      <td>19855</td>
+      <td>0.99275</td>
+      <td>16.021729</td>
+      <td>50.0</td>
+      <td>19984</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>19984.0</td>
+      <td>0.99920</td>
+      <td>-48.217773</td>
+      <td>50.0</td>
+      <td>0.00210</td>
+      <td>1.197183</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>20628</td>
+      <td>False</td>
+      <td>1.03140</td>
+      <td>-28.015137</td>
+      <td>50.0</td>
+      <td>20657</td>
+      <td>1.03285</td>
+      <td>15.686035</td>
+      <td>50.0</td>
+      <td>20802</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>20802.0</td>
+      <td>1.04010</td>
+      <td>-47.485352</td>
+      <td>50.0</td>
+      <td>0.00210</td>
+      <td>1.269841</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>21393</td>
+      <td>False</td>
+      <td>1.06965</td>
+      <td>-29.083252</td>
+      <td>50.0</td>
+      <td>21421</td>
+      <td>1.07105</td>
+      <td>16.784668</td>
+      <td>50.0</td>
+      <td>21559</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>21559.0</td>
+      <td>1.07795</td>
+      <td>-48.370361</td>
+      <td>50.0</td>
+      <td>0.00210</td>
+      <td>1.358209</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>22095</td>
+      <td>False</td>
+      <td>1.10475</td>
+      <td>-28.625488</td>
+      <td>50.0</td>
+      <td>22120</td>
+      <td>1.10600</td>
+      <td>16.906738</td>
+      <td>50.0</td>
+      <td>22250</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>22250.0</td>
+      <td>1.11250</td>
+      <td>-46.417236</td>
+      <td>50.0</td>
+      <td>0.00200</td>
+      <td>1.575758</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>22840</td>
+      <td>False</td>
+      <td>1.14200</td>
+      <td>-30.029297</td>
+      <td>50.0</td>
+      <td>22870</td>
+      <td>1.14350</td>
+      <td>17.242432</td>
+      <td>50.0</td>
+      <td>22998</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>22998.0</td>
+      <td>1.14990</td>
+      <td>-49.102783</td>
+      <td>50.0</td>
+      <td>0.00210</td>
+      <td>1.277778</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>23567</td>
+      <td>False</td>
+      <td>1.17835</td>
+      <td>-29.602051</td>
+      <td>50.0</td>
+      <td>23596</td>
+      <td>1.17980</td>
+      <td>15.441895</td>
+      <td>50.0</td>
+      <td>23729</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>23729.0</td>
+      <td>1.18645</td>
+      <td>-47.515869</td>
+      <td>50.0</td>
+      <td>0.00215</td>
+      <td>1.507692</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>24286</td>
+      <td>False</td>
+      <td>1.21430</td>
+      <td>-29.968262</td>
+      <td>50.0</td>
+      <td>24317</td>
+      <td>1.21585</td>
+      <td>15.594482</td>
+      <td>50.0</td>
+      <td>24460</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>24460.0</td>
+      <td>1.22300</td>
+      <td>-47.668457</td>
+      <td>50.0</td>
+      <td>0.00210</td>
+      <td>1.444444</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>24936</td>
+      <td>False</td>
+      <td>1.24680</td>
+      <td>-29.876709</td>
+      <td>50.0</td>
+      <td>24966</td>
+      <td>1.24830</td>
+      <td>15.747070</td>
+      <td>50.0</td>
+      <td>44707</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.00215</td>
+      <td>1.550000</td>
+    </tr>
+  </tbody>
+</table>
+<p>21 rows × 36 columns</p>
+</div></div></div>
+</div>
+<p>We can also visualize the detected spikes on a plot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_18_1.png" src="_images/findingspikes_18_1.png" />
+</div>
+</div>
+<p>The <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/frame.html">pandas dataframe</a> contains a number of useful functions for analysis. For example we can take the mean of a column</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_trough</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;fast_trough_v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found a mean trough of </span><span class="si">{</span><span class="n">mean_trough</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found a mean trough of -44.91751480102539
+</pre></div>
+</div>
+</div>
+</div>
+<p>In addition we can save the dataframe for opening later:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spikes</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;out.csv&quot;</span><span class="p">)</span> <span class="c1">#Outputs the dataframe to a csv for opening in excel</span>
+<span class="c1">#The &quot;out.csv&quot; specifies the file location/name</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="ensuring-you-captures-the-spikes">
+<h2>Ensuring you captures the spikes<a class="headerlink" href="#ensuring-you-captures-the-spikes" title="Permalink to this headline">¶</a></h2>
+<p>The above example uses the default spike finding options. This is suitable for many applications. However, one may find that this over/under detects spikes in your data. Take for example, the spikes found in one of the latter sweeps:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abf</span><span class="o">.</span><span class="n">setSweep</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_26_1.png" src="_images/findingspikes_26_1.png" />
+</div>
+</div>
+<p>It still catches most of the spikes, however, it misses one or two spikes at the end of the train that you may want to pick up. To ensure we pick up these spikes, we can adjust a few parameters available to us. We can view the available options here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">spike_fe</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on SpikeFeatureExtractor in module ipfx.feature_extractor object:
+
+class SpikeFeatureExtractor(builtins.object)
+ |  SpikeFeatureExtractor(start=None, end=None, filter=10.0, dv_cutoff=20.0, max_interval=0.005, min_height=2.0, min_peak=-30.0, thresh_frac=0.05, reject_at_stim_start_interval=0)
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, start=None, end=None, filter=10.0, dv_cutoff=20.0, max_interval=0.005, min_height=2.0, min_peak=-30.0, thresh_frac=0.05, reject_at_stim_start_interval=0)
+ |      Initialize SweepFeatures object.-
+ |      
+ |      Parameters
+ |      ----------
+ |      t : ndarray of times (seconds)
+ |      v : ndarray of voltages (mV)
+ |      i : ndarray of currents (pA)
+ |      start : start of time window for feature analysis (optional)
+ |      end : end of time window for feature analysis (optional)
+ |      filter : cutoff frequency for 4-pole low-pass Bessel filter in kHz (optional, default 10)
+ |      dv_cutoff : minimum dV/dt to qualify as a spike in V/s (optional, default 20)
+ |      max_interval : maximum acceptable time between start of spike and time of peak in sec (optional, default 0.005)
+ |      min_height : minimum acceptable height from threshold to peak in mV (optional, default 2)
+ |      min_peak : minimum acceptable absolute peak level in mV (optional, default -30)
+ |      thresh_frac : fraction of average upstroke for threshold calculation (optional, default 0.05)
+ |      reject_at_stim_start_interval : duration of window after start to reject potential spikes (optional, default 0)
+ |  
+ |  is_spike_feature_affected_by_clipping(self, key)
+ |  
+ |  process(self, t, v, i)
+ |  
+ |  spike_feature(self, spikes_df, key, include_clipped=False, force_exclude_clipped=False)
+ |      Get specified feature for every spike.
+ |      
+ |      Parameters
+ |      ----------
+ |      key : feature name
+ |      include_clipped: return values for every identified spike, even when clipping means they will be incorrect/undefined
+ |      
+ |      Returns
+ |      -------
+ |      spike_feature_values : ndarray of features for each spike
+ |  
+ |  spike_feature_keys(self, spikes_df)
+ |      Get list of every available spike feature.
+ |  
+ |  spikes(self, spikes_df)
+ |      Get all features for each spike as a list of records.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  AFFECTED_BY_CLIPPING = [&#39;trough_t&#39;, &#39;trough_v&#39;, &#39;trough_i&#39;, &#39;trough_in...
+</pre></div>
+</div>
+</div>
+</div>
+<p>First, we will take a look at the dv/dt threshold!</p>
+<div class="section" id="dv-cutoff-dv-dt-threshold">
+<h3>dv_cutoff: dV/dT threshold<a class="headerlink" href="#dv-cutoff-dv-dt-threshold" title="Permalink to this headline">¶</a></h3>
+<p>The dV/dT threshold is the primary method by which ipfx detects spikes. Putative spikes must pass this check prior to any other settings being applied. By default, ipfx looks for points at which the dV/dT crosses 20mV/mS (V/s) (based on the ephys whitepaper noted above). if we examine the dV/dt of our trace, we can see that the smaller spikes do not reach this threshold</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">)</span> <span class="c1">#take the difference of the adjacent points in mV</span>
+<span class="n">dT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span> <span class="c1">#take the difference of adjacent points in s * 1000 -&gt; ms</span>
+<span class="n">dvdt</span> <span class="o">=</span> <span class="n">dV</span><span class="o">/</span><span class="n">dT</span> <span class="c1">#compute dvdt in mV/ms -&gt; v/s</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dvdt</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;20mV/ms&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="c1">#plot a horizontal line at 20mV/ms</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;10mV/ms&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span> <span class="c1">#plot a horizontal line at 20mV/ms</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x2a9e66cfa58&gt;
+</pre></div>
+</div>
+<img alt="_images/findingspikes_32_1.png" src="_images/findingspikes_32_1.png" />
+</div>
+</div>
+<p>However, it appears that setting a threshold of 10mV/ms should do the trick! Now we will reinitialize the spike finder with the new threshold</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv_cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#reintialize with a dv threshold of 10</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_35_1.png" src="_images/findingspikes_35_1.png" />
+</div>
+</div>
+<p>Its looking good! However, lets say we decided to exclude the final spike in the train, we can adjust some of the other parameters to do so.</p>
+</div>
+<div class="section" id="max-interval-time-between-threshold-and-peak">
+<h3>max_interval: Time between threshold and peak<a class="headerlink" href="#max-interval-time-between-threshold-and-peak" title="Permalink to this headline">¶</a></h3>
+<p>Max interval defines the maximum length of time between the detected threshold and the detected peak. In many cases the default (5ms) should be fine. However, if you have slow or oddly shaped spikes, you may find adjusting this parameter useful. Take for example our threshold to peak time from our last sweep.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">final_spike</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#Gets the time of the last peak</span>
+<span class="n">final_threshold</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;threshold_t&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#gets the last threshgold</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">final_spike</span> <span class="o">-</span> <span class="n">final_threshold</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Threshold to peak time of </span><span class="si">{</span><span class="n">time</span><span class="o">*</span><span class="mi">1000</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Threshold to peak time of 1.6499999999999293ms
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">final_threshold</span><span class="p">,</span> <span class="n">final_spike</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;threshold to peak&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.72</span><span class="p">,</span> <span class="mf">0.74</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-30.0, 0.0)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_40_1.png" src="_images/findingspikes_40_1.png" />
+</div>
+</div>
+<p>By specifying the threshold-to-peak time we can drop this spike</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv_cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_interval</span><span class="o">=</span><span class="mf">0.00164</span><span class="p">)</span> <span class="c1">#Note that the units are in seconds</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Need to recalculate threshold-peak pair that exceeds maximum allowed interval (0.001640 s)
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+INFO:root:Could not redetermine threshold-peak pair - dropping that pair
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_43_1.png" src="_images/findingspikes_43_1.png" />
+</div>
+</div>
+<p>Note that while we dropped that final spike, we lost other spikes! To remedy this, we can try adjusting the minimum height instead!</p>
+</div>
+<div class="section" id="min-height-the-minimum-height-between-threshold-and-peak">
+<h3>min_height: the minimum height between threshold and peak<a class="headerlink" href="#min-height-the-minimum-height-between-threshold-and-peak" title="Permalink to this headline">¶</a></h3>
+<p>The min height parameter defines the cutoff for the minimum amount of voltage an action potential must swing upward. This is computed as the difference between the peak and threshold. Therefore we will want to enter an absolute (non-negative) value. AP’s with a height below this value will be rejected. This value defaults of 2mV.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv_cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_height</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1">#reintialize with a min height of 5</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_48_1.png" src="_images/findingspikes_48_1.png" />
+</div>
+</div>
+<p>We can see that we have successfully excluded the last spike. If we examine closer we can examine the heights of the action potentials</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv_cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#reintialize with a min height of 5</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">final_spike</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#Gets the time of the last peak</span>
+<span class="n">final_threshold</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;threshold_v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#gets the last threshgold</span>
+<span class="n">height</span> <span class="o">=</span> <span class="n">final_spike</span> <span class="o">-</span> <span class="n">final_threshold</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">spike_times</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">final_threshold</span><span class="p">,</span> <span class="n">final_spike</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;threshold to peak&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.72</span><span class="p">,</span> <span class="mf">0.74</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-30.0, 0.0)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_52_1.png" src="_images/findingspikes_52_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="min-peak-the-minimum-absolute-peak-of-the-action-potential">
+<h3>min_peak: the minimum absolute peak of the action potential<a class="headerlink" href="#min-peak-the-minimum-absolute-peak-of-the-action-potential" title="Permalink to this headline">¶</a></h3>
+<p>Similar to the setting above, we can set the cutoff for the min peak of the action potential. However, this value is not calculated in reference to the threshold, instead, it is computed as the minimum the peak must reach (regardless of distance between peak and threshold). Therefore, its okay to use negative numbers for this setting. Action potentials with peaks that do not reach this level will be rejected. This value defaults to -30</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spike_fe</span> <span class="o">=</span> <span class="n">SpikeFeatureExtractor</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv_cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_peak</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#reintialize with a min peak 10</span>
+<span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_fe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#isolate the columns for plotting</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_t&#39;</span><span class="p">]</span> <span class="c1">#This isolates the peak_t columm</span>
+<span class="n">spike_peak</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="s1">&#39;peak_v&#39;</span><span class="p">]</span> <span class="c1">#this isolates the peak_v column</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">spike_peak</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#Plots X&#39;s at the peak of the action potential</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;min_peak threshold of -10&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.55, 1.5)
+</pre></div>
+</div>
+<img alt="_images/findingspikes_56_1.png" src="_images/findingspikes_56_1.png" />
+</div>
+</div>
+<p>zooming a bit closer shows us that this threshold of -10 allows us to exclude the last spike but keep the others!</p>
+</div>
+</div>
+<div class="section" id="putting-it-all-together-find-spikes-across-all-sweeps">
+<h2>Putting it all together: Find spikes across all sweeps<a class="headerlink" href="#putting-it-all-together-find-spikes-across-all-sweeps" title="Permalink to this headline">¶</a></h2>
+<p>So far we have just been analyzing a single sweep of our ABF file. However functionally</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="gettingstarted.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">1. Getting started</p>
+            </div>
+        </a>
+    </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By smestern<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

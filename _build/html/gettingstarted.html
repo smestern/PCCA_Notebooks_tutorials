@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1. Getting started &#8212; Analyzing Patch-Clamp Electrophysiology in Python</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="_static/sphinx-book-theme.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Finding Spikes!" href="findingspikes.html" />
+    <link rel="prev" title="Patch clamp (current clamp) Analysis in python" href="intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Analyzing Patch-Clamp Electrophysiology in Python</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Patch clamp (current clamp) Analysis in python
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. Getting started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="findingspikes.html">
+   2. Finding Spikes!
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/gettingstarted.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/gettingstarted.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installing-the-prereq">
+   Installing the prereq.
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#importing-our-packages-and-loading-our-data">
+   Importing our packages and loading our data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-the-sweeps">
+   Getting the Sweeps
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="getting-started">
+<h1>1. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-the-prereq">
+<h2>Installing the prereq.<a class="headerlink" href="#installing-the-prereq" title="Permalink to this headline">¶</a></h2>
+<p>If you have not already, you will need to install python. I recommend using <a class="reference external" href="https://www.anaconda.com/products/individual">Anaconda</a>.</p>
+<p>To get started we will need to install and import the 4 main packages used within this tutorial:</p>
+<ol class="simple">
+<li><p>Numpy</p></li>
+<li><p>MatplotLib</p></li>
+<li><p><a class="reference external" href="https://github.com/swharden/pyABF">pyABF</a> by Scott Harden</p></li>
+<li><p><a class="reference external" href="https://github.com/AllenInstitute/ipfx">ipfx</a> from the Allen Institute</p></li>
+</ol>
+<p>these can be installed using pip. For example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipfx</span></code></p>
+</div>
+<div class="section" id="importing-our-packages-and-loading-our-data">
+<h2>Importing our packages and loading our data<a class="headerlink" href="#importing-our-packages-and-loading-our-data" title="Permalink to this headline">¶</a></h2>
+<p>To begin with we will import our necessary packages:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyabf</span>
+<span class="kn">import</span> <span class="nn">ipfx</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Loading our data is as simple as a single command! I have provided an example data file (excuse the noisy recording). However feel free to excute this notebook locally with your own abf files!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abf</span> <span class="o">=</span> <span class="n">pyabf</span><span class="o">.</span><span class="n">ABF</span><span class="p">(</span><span class="s2">&quot;data/example1.abf&quot;</span><span class="p">)</span> <span class="c1">#this tells pyabf to load our data and store it in an abf object</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This loads our data as an python object.
+Now, we can simple access the various data of the abf file by access the objects attributes.
+In python these are accessed by using the
+<code class="docutils literal notranslate"><span class="pre">abf.&lt;something&gt;</span></code> conventions</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### ABF metadata is loaded with the file. This can be accessed using the ABF objects properties</span>
+<span class="n">file_id</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">abfID</span>
+<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">dataRate</span>
+<span class="n">sweeps</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepCount</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded abf file </span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2"> with sampling rate </span><span class="si">{</span><span class="n">sampling_rate</span><span class="si">}</span><span class="s2">hz, and </span><span class="si">{</span><span class="n">sweeps</span><span class="si">}</span><span class="s2"> sweeps&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded abf file example1 with sampling rate 20000hz, and 15 sweeps
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also view a full list of all the data available to us:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">abf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;__class__&#39;,
+ &#39;__delattr__&#39;,
+ &#39;__dict__&#39;,
+ &#39;__dir__&#39;,
+ &#39;__doc__&#39;,
+ &#39;__eq__&#39;,
+ &#39;__format__&#39;,
+ &#39;__ge__&#39;,
+ &#39;__getattribute__&#39;,
+ &#39;__gt__&#39;,
+ &#39;__hash__&#39;,
+ &#39;__init__&#39;,
+ &#39;__init_subclass__&#39;,
+ &#39;__le__&#39;,
+ &#39;__lt__&#39;,
+ &#39;__module__&#39;,
+ &#39;__ne__&#39;,
+ &#39;__new__&#39;,
+ &#39;__reduce__&#39;,
+ &#39;__reduce_ex__&#39;,
+ &#39;__repr__&#39;,
+ &#39;__setattr__&#39;,
+ &#39;__sizeof__&#39;,
+ &#39;__str__&#39;,
+ &#39;__subclasshook__&#39;,
+ &#39;__weakref__&#39;,
+ &#39;_adcSection&#39;,
+ &#39;_cacheStimulusFiles&#39;,
+ &#39;_dacSection&#39;,
+ &#39;_dataGain&#39;,
+ &#39;_dataOffset&#39;,
+ &#39;_dtype&#39;,
+ &#39;_epochPerDacSection&#39;,
+ &#39;_epochSection&#39;,
+ &#39;_fileGUID&#39;,
+ &#39;_fileSize&#39;,
+ &#39;_headerV2&#39;,
+ &#39;_ide_helper&#39;,
+ &#39;_loadAndScaleData&#39;,
+ &#39;_makeAdditionalVariables&#39;,
+ &#39;_nDataFormat&#39;,
+ &#39;_preLoadData&#39;,
+ &#39;_protocolSection&#39;,
+ &#39;_readHeadersV1&#39;,
+ &#39;_readHeadersV2&#39;,
+ &#39;_sectionMap&#39;,
+ &#39;_stringsIndexed&#39;,
+ &#39;_stringsSection&#39;,
+ &#39;_sweepBaselinePoints&#39;,
+ &#39;_synchArraySection&#39;,
+ &#39;_tagSection&#39;,
+ &#39;abfDateTime&#39;,
+ &#39;abfDateTimeString&#39;,
+ &#39;abfFileComment&#39;,
+ &#39;abfFilePath&#39;,
+ &#39;abfFolderPath&#39;,
+ &#39;abfID&#39;,
+ &#39;abfVersion&#39;,
+ &#39;abfVersionString&#39;,
+ &#39;adcNames&#39;,
+ &#39;adcUnits&#39;,
+ &#39;channelCount&#39;,
+ &#39;channelList&#39;,
+ &#39;creator&#39;,
+ &#39;creatorVersion&#39;,
+ &#39;creatorVersionString&#39;,
+ &#39;dacNames&#39;,
+ &#39;dacUnits&#39;,
+ &#39;data&#39;,
+ &#39;dataByteStart&#39;,
+ &#39;dataLengthMin&#39;,
+ &#39;dataLengthSec&#39;,
+ &#39;dataPointByteSize&#39;,
+ &#39;dataPointCount&#39;,
+ &#39;dataPointsPerMs&#39;,
+ &#39;dataRate&#39;,
+ &#39;dataSecPerPoint&#39;,
+ &#39;fileGUID&#39;,
+ &#39;fileUUID&#39;,
+ &#39;headerHTML&#39;,
+ &#39;headerLaunch&#39;,
+ &#39;headerMarkdown&#39;,
+ &#39;headerText&#39;,
+ &#39;holdingCommand&#39;,
+ &#39;launchInClampFit&#39;,
+ &#39;md5&#39;,
+ &#39;protocol&#39;,
+ &#39;protocolPath&#39;,
+ &#39;saveABF1&#39;,
+ &#39;setSweep&#39;,
+ &#39;stimulusByChannel&#39;,
+ &#39;stimulusFileFolder&#39;,
+ &#39;sweepC&#39;,
+ &#39;sweepChannel&#39;,
+ &#39;sweepCount&#39;,
+ &#39;sweepD&#39;,
+ &#39;sweepDerivative&#39;,
+ &#39;sweepEpochs&#39;,
+ &#39;sweepIntervalSec&#39;,
+ &#39;sweepLabelC&#39;,
+ &#39;sweepLabelD&#39;,
+ &#39;sweepLabelX&#39;,
+ &#39;sweepLabelY&#39;,
+ &#39;sweepLengthSec&#39;,
+ &#39;sweepList&#39;,
+ &#39;sweepNumber&#39;,
+ &#39;sweepPointCount&#39;,
+ &#39;sweepTimesMin&#39;,
+ &#39;sweepTimesSec&#39;,
+ &#39;sweepUnitsC&#39;,
+ &#39;sweepUnitsX&#39;,
+ &#39;sweepUnitsY&#39;,
+ &#39;sweepX&#39;,
+ &#39;sweepY&#39;,
+ &#39;tagComments&#39;,
+ &#39;tagSweeps&#39;,
+ &#39;tagTimesMin&#39;,
+ &#39;tagTimesSec&#39;,
+ &#39;userList&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-the-sweeps">
+<h2>Getting the Sweeps<a class="headerlink" href="#getting-the-sweeps" title="Permalink to this headline">¶</a></h2>
+<p>The actual data is stored in the abf.Data property. However the data is not separated by sweep, and is stored continuously.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-71.8384 -72.052  -71.9299 ... -68.6035 -68.3289 -68.5425]]
+1500000
+</pre></div>
+</div>
+</div>
+</div>
+<p>To make it easy to select a specific sweep pyABF provides a <code class="docutils literal notranslate"><span class="pre">abf.setSweep(x)</span></code> attribute. Once setting a specific sweep, data can be accessed using <code class="docutils literal notranslate"><span class="pre">abf.sweepX,</span> <span class="pre">abf.sweepY,</span> <span class="pre">abf.sweepC</span></code> whereas X is the time, Y is the response, and C is the command.
+Lets plot a single sweep:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abf</span><span class="o">.</span><span class="n">setSweep</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">sweepX</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span>
+<span class="n">sweepY</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span>
+<span class="n">sweepC</span> <span class="o">=</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepC</span>
+<span class="c1">#Create a figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepY</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span> <span class="c1">#note we can pull the label from here</span>
+<span class="c1"># We could also use abf.sweepUnitsY # This can be helpful in determining Clamp mode programmatically!</span>
+<span class="c1">#create a second figure to show the command waveform</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">sweepC</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Applied Current (pA)&#39;)
+</pre></div>
+</div>
+<img alt="_images/gettingstarted_16_1.png" src="_images/gettingstarted_16_1.png" />
+<img alt="_images/gettingstarted_16_2.png" src="_images/gettingstarted_16_2.png" />
+</div>
+</div>
+<p>To access each sweep we can use a for loop. To do so, I recommend using <code class="docutils literal notranslate"><span class="pre">abf.sweepList</span></code> which provides a numerical iter for each possible sweep (helps to ensure you don’t iter out of range)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sweepNumber</span> <span class="ow">in</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepList</span><span class="p">:</span> <span class="c1">#steps through each sweep</span>
+  <span class="n">abf</span><span class="o">.</span><span class="n">setSweep</span><span class="p">(</span><span class="n">sweepNumber</span><span class="p">)</span> <span class="c1">#Set the sweep to that number</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepX</span><span class="p">,</span> <span class="n">abf</span><span class="o">.</span><span class="n">sweepY</span><span class="p">)</span> <span class="c1"># and plot the sweeps</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">abf</span><span class="o">.</span><span class="n">sweepLabelY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Membrane Potential (mV)&#39;)
+</pre></div>
+</div>
+<img alt="_images/gettingstarted_18_1.png" src="_images/gettingstarted_18_1.png" />
+</div>
+</div>
+<p>Now that we can open and view our data, lets find some spikes!</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="intro.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Patch clamp (current clamp) Analysis in python</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="findingspikes.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">2. Finding Spikes!</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By smestern<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
